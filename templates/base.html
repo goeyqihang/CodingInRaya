@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MEX Dashboard{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    {# Include marked.js library here if chat page needs it, or keep it in chat.html's script block #}
+    {# <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> #}
+    {% block head_extra %}{% endblock %}
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='images/grab-logo.png') }}" alt="Grab Logo">
+            </div>
+            <nav class="menu main-menu">
+                <ul>
+                    {# --- Modified Insights Link (Removed Beta Badge) --- #}
+                    <li>
+                        <a href="{{ url_for('home') }}" class="{{ 'active' if request and request.endpoint == 'home' else '' }}">
+                            <i class="fas fa-chart-pie"></i> Insights
+                            {# Removed: <span class="beta-badge">Beta</span> #}
+                        </a>
+                    </li>
+                    {# --- End Modified Insights Link --- #}
+
+                    <li><a href="#"><i class="fas fa-wallet"></i> Finance <i class="fas fa-chevron-down arrow"></i></a></li>
+                    <li><a href="#"><i class="fas fa-bars"></i> Menu <i class="fas fa-chevron-down arrow"></i></a></li>
+                    <li><a href="#"><i class="fas fa-users"></i> Employees <span class="badge">3</span></a></li>
+                    <li><a href="#"><i class="fas fa-user-circle"></i> Profile</a></li>
+                    <li><a href="#"><i class="fas fa-question-circle"></i> Help Centre</a></li>
+
+                    {# --- Modified MEX Assistant Link (Added Beta Badge) --- #}
+                    <li>
+                        <a href="{{ url_for('chat_page') }}" class="{{ 'active' if request and request.endpoint == 'chat_page' else '' }}">
+                           <i class="fas fa-robot"></i> MEX Assistant <span class="beta-badge">Beta</span> {# <-- Added this span #}
+                        </a>
+                    </li>
+                     {# --- End Modified MEX Assistant Link --- #}
+                </ul>
+            </nav>
+            <div class="sidebar-bottom">
+                <a href="#" class="sidebar-bottom-link"><i class="fas fa-download"></i> Download our app</a>
+                <hr class="divider">
+                <a href="#" class="sidebar-bottom-link"><i class="fas fa-globe"></i> English (UK) <i class="fas fa-chevron-down arrow"></i></a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    {# Ensure scripts block is here for child templates #}
+    {% block scripts %}{% endblock %}
+</body>
+</html>

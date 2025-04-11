@@ -87,3 +87,4 @@ Thumbs.db
 # Other temp / generated files
 *.swp
 *~
+.env

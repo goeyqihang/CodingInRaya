@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}MEX Assistant Chat{% endblock %}
+
+{% block head_extra %}
+    {# No extra head elements needed as chat styles are in main CSS #}
+{% endblock %}
+
+{% block content %}
+    <div class="chat-page-container">
+        {# <h1>MEX Assistant</h1> #} {# Optional title #}
+
+        <div class="chat-container" id="chatbox">
+            <div class="message ai-message">Hello! I'm the MEX Assistant. How can I help you today?</div>
+            </div>
+
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="Type your message here..." autocomplete="off">
+            <button id="sendButton">
+                Send
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+{% endblock %}
+
+{# --- 修改下面这个 scripts block --- #}
+{% block scripts %}
+    {# --- 在加载 chat_script.js 之前，添加这一行来引入 marked.js --- #}
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    {# --- 确保你的 chat_script.js 在 marked.js 之后加载 --- #}
+    <script src="{{ url_for('static', filename='js/chat_script.js') }}" defer></script>
+{% endblock %}
+{# --- 修改结束 --- #}

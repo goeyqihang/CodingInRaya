@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Insights - Customers{% endblock %}
+
+{% block content %}
+    <header class="content-header insights-header">
+        <div class="insights-header-left">
+            <h1>Insights </h1>
+            <nav class="insights-tabs">
+                <a href="#">Overview</a>
+                <a href="#">Operations</a>
+                <a href="#">Menu</a>
+                <a href="#">Marketing</a>
+                <a href="{{ url_for('home') }}" class="tab-active">Customers</a>
+            </nav>
+        </div>
+        <div class="insights-header-right">
+             <button class="header-action-btn pdf-btn">
+                 <i class="far fa-file-pdf"></i> Download PDF
+             </button>
+              <button class="header-action-btn download-btn">
+                  <i class="fas fa-download"></i> Download
+              </button>
+        </div>
+    </header>
+
+    <section class="filter-bar">
+        <div class="filter-item date-range">
+             <label>Date</label>
+             <input type="text" value="3/15/2021 - 6/11/2021" readonly>
+        </div>
+        <div class="filter-item"> <label>Type</label> <select><option>All</option></select> </div>
+        <div class="filter-item"> <label>City</label> <select><option>All</option></select> </div>
+        <div class="filter-item"> <label>Store</label> <select><option>All</option></select> </div>
+        <div class="filter-item search-filter">
+             <button class="search-btn" id="searchBtn"><i class="fas fa-search"></i> Search</button>
+             <div class="search-dropdown" id="searchDropdown">
+                 <label><input type="checkbox"> Select all</label>
+                 <label><input type="checkbox"> GrabFood</label>
+                 <label><input type="checkbox"> GrabPay</label>
+             </div>
+        </div>
+    </section>
+
+    {# --- Modified Insights Grid with Updated Image Styling --- #}
+    <section class="insights-grid">
+        <div class="insight-block grid-col-span-1">
+            <h4>Customer breakdown</h4>
+            <h2>23,826</h2>
+            {# Use container div with class, style image inside #}
+            <div class="chart-placeholder small-bar-chart">
+                <img src="{{ url_for('static', filename='images/sample_bar_chart_1.png') }}" alt="Customer Breakdown Bar Chart">
+            </div>
+        </div>
+        <div class="insight-block grid-col-span-1">
+            <h4>Sales by customer type</h4>
+            <h2>1,800,906</h2>
+            <div class="chart-placeholder small-bar-chart">
+                <img src="{{ url_for('static', filename='images/sample_bar_chart_2.png') }}" alt="Sales by Customer Type Bar Chart">
+            </div>
+        </div>
+        <div class="insight-block grid-col-span-2">
+            <h4>Customer retention</h4>
+            <p>The proportion of customers reordering week after week</p>
+            <div class="chart-placeholder heatmap-chart">
+                 <img src="{{ url_for('static', filename='images/sample_heatmap.png') }}" alt="Customer Retention Heatmap Chart">
+            </div>
+        </div>
+        <div class="insight-block grid-col-span-1">
+             <h4>Purchase frequency</h4>
+             <h2>1.31</h2>
+             <p>Number of repeat purchases per customer</p>
+             <div class="chart-placeholder small-bar-chart">
+                 <img src="{{ url_for('static', filename='images/sample_bar_chart_3.png') }}" alt="Purchase Frequency Bar Chart">
+             </div>
+        </div>
+         <div class="insight-block grid-col-span-1">
+              <h4>Demographics</h4>
+              <p>Distribution across various attributes can drive input into your paid...</p>
+              <a href="#" class="details-link">See details <i class="fas fa-chevron-right"></i></a>
+        </div>
+         <div class="insight-block grid-col-span-1">
+              <h4>Age</h4>
+              <div class="chart-placeholder donut-chart">
+                 <img src="{{ url_for('static', filename='images/sample_donut_age.png') }}" alt="Age Distribution Donut Chart">
+              </div>
+        </div>
+         <div class="insight-block grid-col-span-1">
+              <h4>Gender</h4>
+              <div class="chart-placeholder donut-chart">
+                  <img src="{{ url_for('static', filename='images/sample_donut_gender.png') }}" alt="Gender Distribution Donut Chart">
+              </div>
+        </div>
+    </section>
+    {# --- End of Modified Insights Grid --- #}
+{% endblock %}
+
+{% block scripts %}
+    {# Simple JS for search dropdown toggle - Keep existing JS #}
+    <script>
+        try {
+            document.getElementById('searchBtn').addEventListener('click', function(event) {
+                event.stopPropagation();
+                var dropdown = document.getElementById('searchDropdown');
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+            });
+            document.addEventListener('click', function(event) {
+                var dropdown = document.getElementById('searchDropdown');
+                var searchBtn = document.getElementById('searchBtn');
+                if (dropdown && !dropdown.contains(event.target) && !searchBtn.contains(event.target)) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        } catch (e) { console.error("Error setting up search dropdown:", e); }
+    </script>
+{% endblock %}
