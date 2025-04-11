@@ -65,7 +65,7 @@ CODINGINRAYA/
 ├── .gitignore
 ├── requirements.txt         # Python dependencies (MUST be created)
 └── README.md                # This file
-
+```
 ## Data
 
 The application requires the following CSV files to be placed in the `data/` directory:
