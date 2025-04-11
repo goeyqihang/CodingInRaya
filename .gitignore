@@ -1,0 +1,89 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment folder (IMPORTANT!)
+# Use the name of your virtual environment folder
+venv/
+# Common alternative names
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Environment variables file (IMPORTANT!)
+# Ignore the .env file containing secrets
+.env
+# Ignore other potential .env files like .env.local, .env.development etc.
+*.env.*
+# But DO NOT ignore .env.example or similar template files (if you create one)
+!.env.example
+!.env.template
+
+# Instance folder (Common in Flask)
+/instance/
+instance.cfg
+
+# Distribution / packaging / eggs
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Type checker cache
+.mypy_cache/
+.pytype/
+.dmypy.json
+dmypy.json
+
+# IDE / Editor specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+*.log.*
+
+# Other temp / generated files
+*.swp
+*~
