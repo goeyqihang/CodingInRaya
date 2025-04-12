@@ -1,133 +1,184 @@
-# MEX Assistant - Grab UMHackathon 2025 Prototype
+# MEX Assistant - AI Business Advisor for Grab Merchants (UMHackathon 2025 Prototype)
 
-## Project Goal
+**[➡️ View Presentation Slides](YOUR_SLIDE_LINK_HERE)** <-- Replace YOUR_SLIDE_LINK_HERE with your actual link
 
-This project is a functional prototype developed for the **UMHackathon 2025**, addressing **Domain 3: Economic Empowerment through AI**. 
+## Description
 
-The goal is to build **MEX Assistant**, an AI-powered chat assistant designed to empower Grab's merchant-partners (MEX) by providing actionable insights and guidance derived from their own business data. This prototype focuses on demonstrating core capabilities via a web-based chat interface.
+MEX Assistant is an AI-powered chatbot designed as a prototype for the UMHackathon 2025. It aims to provide business insights and actionable suggestions to Grab merchants (MEX) by analyzing their sales, item, and transaction data. The assistant offers insights on sales performance, popular items, regional cuisine trends (for new merchants), and potential strategies for improvement.
 
-## Features Implemented
+This repository includes:
+1.  A **Live Version** (`app.py`) that utilizes the OpenAI API (GPT-4-Turbo) to generate dynamic responses based on data context and conversation history.
+2.  A **Demo Version** (`app_demo.py`) that provides a hardcoded, sequential walkthrough of key features with predefined responses and images, suitable for predictable demonstrations without API calls.
 
-* **Chat Interface:** A web interface (`/chat`) allowing merchants to interact with the AI assistant.
-* **Data Loading & Preprocessing:** Loads and cleans data from provided CSV files (`merchant`, `transaction_data`, `transaction_items`, `items`, `keywords`).
-* **Intent Recognition:** Basic intent recognition to understand user queries related to:
-    * Sales Performance Summary
-    * Popular Items (based on unique order count)
-    * Regional Cuisine Popularity (for new merchant recommendations)
-    * Profit Improvement Suggestions
-* **Data Analysis:**
-    * Calculates sales summaries (total value, order count) for specific time periods (`get_sales_summary`).
-    * Identifies top 5 popular items based on unique order counts for specific time periods (`get_popular_items_by_frequency`).
-    * Analyzes popular cuisine types within a specific city based on aggregate order frequency (`get_popular_cuisines_in_city`).
-    * *Note: Profit analysis currently synthesizes sales and popular item data, acknowledging the lack of cost data.*
-* **AI Interaction:**
-    * Uses the OpenAI API (configured for GPT-4-Turbo as per discussion) to generate natural language responses.
-    * Provides data context to the AI based on recognized intent.
-    * Uses tailored system prompts to guide the AI's persona and response generation (including addressing the user in the second person).
-* **Basic Dashboard UI:** Includes a static dashboard layout (`/`) with hardcoded sample chart images for visual context (requires running `generate_sample_charts.py`).
+The current implementation features a Flask backend, data analysis using Pandas, and a web interface built with HTML, CSS, and vanilla JavaScript. Chat history for both versions is managed client-side within the browser's memory for the duration of the session.
+
+## Features
+
+* **Data Analysis:** Performs analyses on provided CSV data for:
+    * Sales Summary (Total Sales, Order Count) over specified periods.
+    * Popular Items (Top 5 based on unique order counts).
+    * Regional Cuisine Popularity (Top 5 cuisine tags in a city based on unique orders).
+    * Low Performing Items (Bottom 5 based on unique order counts).
+* **Chat Interface:** Web-based chat UI (`/chat` page) allowing users to interact with the assistant.
+* **Intent Recognition (Live Mode):** Basic keyword-based intent recognition to fetch relevant data context (Sales, Popular Items, Regional Trends, Profit Advice) for the LLM.
+* **Dynamic AI Responses (Live Mode):** Uses OpenAI's GPT-4-Turbo, guided by a system prompt and data context, to generate tailored advice.
+* **Hardcoded Demo Sequence (Demo Mode):** Provides a reliable, step-by-step demonstration of features using predefined responses, including multi-part replies and image display.
+* **Client-Side History:** Manages conversation history in the browser using JavaScript memory (cleared on page refresh/close).
+* **Markdown & Image Support:** Renders AI responses formatted with Markdown (using Marked.js) and displays images embedded in demo replies.
+* **Basic Dashboard UI:** Includes a static dashboard layout (`/` page) resembling the Grab Merchant interface structure.
 
 ## Technology Stack
 
 * **Backend:** Python 3.x, Flask
+* **Frontend:** HTML5, CSS3, JavaScript (ES6+)
 * **Data Handling:** Pandas, NumPy
-* **AI Model:** OpenAI API (GPT-4-Turbo or configurable via environment variable)
-* **Frontend:** HTML (Jinja2 Templating), CSS, Vanilla JavaScript
-* **Environment:** python-dotenv
-* **Chart Generation (Static Samples):** Matplotlib, Seaborn
-* **Markdown Rendering (Frontend):** marked.js (via CDN)
+* **AI Model (Live Mode):** OpenAI API (specifically `gpt-4-turbo`)
+* **Libraries:**
+    * `openai`: For interacting with the OpenAI API.
+    * `python-dotenv`: For managing environment variables.
+    * `Flask`: Web framework.
+    * `Pandas`: Data manipulation and analysis.
+    * `Marked.js`: (CDN) For rendering Markdown on the frontend.
+    * `Font Awesome`: (CDN) For icons.
+* **Key Python Libraries:** (Based on provided list - ensure `requirements.txt` is accurate)
+    * `Flask==3.1.0`
+    * `pandas==2.2.3`
+    * `openai==1.72.0`
+    * `python-dotenv==1.1.0`
+    * `numpy==2.2.4`
+    * ... and others (refer to your generated `requirements.txt`)
 
 ## Project Structure
 
 ```text
 CODINGINRAYA/
-├── app.py                 # Main Flask application, routes, API logic
+├── app.py                 # Main application (Live AI)
+├── app_demo.py            # Demo application (Hardcoded Sequence)
 ├── analysis.py            # Data analysis functions
 ├── data_utils.py          # Data loading and preprocessing functions
-├── generate_sample_charts.py # Script to create placeholder chart images
-├── data/                    # Directory for input CSV files
-│   ├── items.csv
-│   ├── keywords.csv
+├── requirements.txt       # Python dependencies
+├── .env                   # Environment variables (API keys, Secret Key) - !! DO NOT COMMIT !!
+├── .gitignore             # Files/folders to ignore in git
+├── data/                  # CSV data files (needs to be populated)
 │   ├── merchant.csv
 │   ├── transaction_data.csv
-│   └── transaction_items.csv
-├── static/                  # Static assets
-│   ├── css/style.css
-│   ├── images/            # Place generated/downloaded images here
-│   │   └── grab-logo.png
-│   │   └── sample_*.png
-│   └── js/chat_script.js
-├── templates/               # HTML templates
-│   ├── base.html
-│   ├── chat.html
-│   └── index.html
-├── venv/                    # Python virtual environment (recommended)
-├── .env                     # Stores API keys (MUST be created)
-├── .gitignore
-├── requirements.txt         # Python dependencies (MUST be created)
-└── README.md                # This file
+│   ├── transaction_items.csv
+│   ├── items.csv
+│   └── keywords.csv         # (Assuming this is also needed based on data_utils)
+├── static/                # Static assets
+│   ├── css/
+│   │   └── style.css      # Main stylesheet
+│   ├── js/
+│   │   └── chat_script.js # Frontend chat logic
+│   └── images/            # Demo images (e.g., daily_orders_graph.png, grab-logo.png)
+│       └── ...
+└── templates/             # HTML templates
+├── base.html          # Base template with sidebar/layout
+├── index.html         # Static dashboard page
+└── chat.html          # Chat interface page
 ```
+
+## Setup
+
+1.  **Clone the repository:**
+    ```bash
+    git clone <your-repository-url>
+    cd <repository-folder>
+    ```
+2.  **Create and activate a virtual environment:** (Recommended)
+    ```bash
+    # Windows
+    python -m venv venv
+    .\venv\Scripts\activate
+
+    # macOS/Linux
+    python3 -m venv venv
+    source venv/bin/activate
+    ```
+3.  **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+    *(Note: Ensure `requirements.txt` accurately reflects all needed packages using `pip freeze > requirements.txt` in your activated virtual environment).*
+4.  **Create `.env` file:** Create a file named `.env` in the project root directory. Add your OpenAI API key and generate a Flask secret key:
+    ```dotenv
+    OPENAI_API_KEY=sk-YourActualOpenAIKeyHere
+    FLASK_SECRET_KEY=YourGeneratedStrongSecretKeyHere
+    ```
+    * Generate a strong `FLASK_SECRET_KEY` in your terminal using:
+        ```bash
+        python -c "import secrets; print(secrets.token_hex(24))"
+        ```
+5.  **Add Data Files:** Create a `data/` directory in the project root. Place the required CSV data files (`merchant.csv`, `transaction_data.csv`, `transaction_items.csv`, `items.csv`, `keywords.csv`) inside it.
+6.  **Add Images:** Create a `static/images/` directory. Place any images used (like the Grab logo for the sidebar and any charts/graphs referenced in `app_demo.py` or `index.html`) inside it. Ensure filenames match the paths used in the code (e.g., `daily_orders_graph.png`).
+
+## Running the Application
+
+You can run either the live version (connecting to OpenAI) or the hardcoded demo version. Ensure only one is running at a time on the default port (5000) to avoid conflicts.
+
+**1. Running the Live Version (`app.py`)**
+
+* Connects to the OpenAI API for responses. Requires a valid `OPENAI_API_KEY`.
+* Chat history is managed in the browser's memory for the current session (cleared on refresh).
+* Command:
+    ```bash
+    python app.py
+    ```
+    or using Flask CLI:
+    ```bash
+    flask --app app run --debug
+    ```
+
+**2. Running the Demo Version (`app_demo.py`)**
+
+* Uses hardcoded responses based on user message count. Does **not** call the OpenAI API.
+* Ideal for predictable demonstrations.
+* Chat history is managed in the browser's memory for the current session (cleared on refresh).
+* Command:
+    ```bash
+    python app_demo.py
+    ```
+    or using Flask CLI:
+    ```bash
+    flask --app app_demo run --debug
+    ```
+
+**Accessing the Application:**
+
+Once the server is running (either version), open your web browser and navigate to:
+`http://127.0.0.1:5000`
+
+* Navigate to the **MEX Assistant** link in the sidebar (or directly to `/chat`) to use the chat interface.
+
+## Demo Sequence (`app_demo.py`)
+
+The hardcoded demo version (`app_demo.py`) follows this specific interaction flow based on the count of user messages sent during the current browser session:
+
+1.  **User sends 1st message:** AI replies with a welcome and a weekly sales summary (5% order increase, stable AOV ~RM22), and asks about showing a daily graph (2 replies).
+2.  **User sends 2nd message:** AI replies showing the daily orders line graph (`daily_orders_graph.png`), comments on sales trends (e.g., Friday high, Thursday dip), and provides an observation about a specific item's view vs. order conversion rate (e.g., Spicy Chicken Sandwich) (3 replies).
+3.  **User sends 3rd message:** AI replies suggesting reasons for the low conversion and proposes a specific promotion (e.g., Thursday discount for the sandwich), asking if the user wants help setting it up (1 reply).
+4.  **User sends 4th message:** AI replies confirming the RM3 discount promotion for Thursday is now active and asks if there's anything else (1 reply).
+5.  **User sends 5th message:** AI replies confirming the promotion start details (Thursday, from opening to closing) in Malay (2 replies).
+6.  **Subsequent messages:** AI returns a fallback message indicating the end of the planned demo sequence.
+
+*Note: Ensure the image file paths referenced in `app_demo.py` (e.g., `/static/images/daily_orders_graph.png`) exist and contain the appropriate demo images.*
+
 ## Data
 
-The application requires the following CSV files to be placed in the `data/` directory:
+The application requires the following CSV files placed in the `data/` directory:
 
 * `merchant.csv`
 * `transaction_data.csv`
 * `transaction_items.csv`
 * `items.csv`
-* `keywords.csv`
+* `keywords.csv` (based on `data_utils.py`)
 
-Ensure these files exist and contain the expected columns for the analysis functions to work correctly (e.g., `order_value`, `order_time`, `city_id`, `item_id`, `cuisine_tag`).
+The quality and format of the data in these files directly impact the analysis results generated by `analysis.py` (in the live version). `data_utils.py` performs essential preprocessing.
 
-## Setup & Installation
+## Notes / Known Issues
 
-1.  **Clone the Repository:**
-    ```bash
-    git clone <your-repo-url>
-    cd CODINGINRAYA
-    ```
-2.  **Create Virtual Environment:** (Recommended)
-    ```bash
-    python -m venv venv
-    ```
-3.  **Activate Virtual Environment:**
-    * Windows: `venv\Scripts\activate`
-    * macOS/Linux: `source venv/bin/activate`
-4.  **Install Dependencies:** Create a `requirements.txt` file (see content in previous response or generate using `pip freeze`) in the root directory and run:
-    ```bash
-    pip install -r requirements.txt
-    ```
-    *(Required libraries: flask, pandas, python-dotenv, openai, numpy, matplotlib, seaborn)*
-5.  **Set Up Environment Variables:** Create a file named `.env` in the project root directory and add your OpenAI API key:
-    ```dotenv
-    OPENAI_API_KEY=sk-YourSecretOpenAiApiKeyGoesHere
-    ```
-6.  **Add Data:** Place the required CSV files into the `data/` directory.
-7.  **(Optional) Generate Sample Chart Images:** To populate the static dashboard (`/`) with visual placeholders, run the generation script (ensure `static/images/` exists):
-    ```bash
-    python generate_sample_charts.py
-    ```
-
-## Running the Application
-
-1.  Make sure your virtual environment is activated.
-2.  Run the Flask development server from the project root directory:
-    ```bash
-    python -m flask --debug run
-    ```
-    (Or `python app.py` if using `app.run()` directly)
-3.  Open your web browser and navigate to `http://127.0.0.1:5000/chat` to access the MEX Assistant chat interface.
-4.  Navigate to `http://127.0.0.1:5000/` to view the static Insights dashboard (if chart images were generated).
-
-## Configuration Notes
-
-* The specific merchant ID (`merchant_id_to_query`) and city ID (`city_id_to_query`) used for certain analyses are currently hardcoded in `app.py`. Modify these directly in the code if you need to analyze different default entities. In a production scenario, this would typically come from user authentication or selection.
-* Ensure the OpenAI model name (`gpt-4-turbo` used in the last version) in `app.py` matches a model accessible by your API key.
-
-## Future Improvements (Ideas)
-
-* Implement analysis for specific item performance (revenue, trends).
-* Add sales trend analysis (comparison between periods).
-* Integrate cost data for actual profit calculation.
-* Develop more robust intent recognition (e.g., using embeddings, LLM function calling).
-* Implement user authentication to fetch data for the logged-in merchant dynamically.
-* Explore dynamic chart generation using JavaScript libraries based on data sent from the backend for the Insights page or even within the chat.
+* **Hardcoded IDs:** The current implementation uses hardcoded `merchant_id` ('3e2b6') and `city_id` ('8' - Subang Jaya) in the analysis calls. This should be made dynamic for real-world use.
+* **Client-Side History:** History is lost on page refresh or closing the tab. This is suitable for demos where a fresh start is desired on reload but not for persistent conversations. History length is also limited client-side.
+* **Demo Data:** The hardcoded demo responses use specific example data values and item names (e.g., RM 5,250.50, Nasi Lemak Special). Ensure these align with the story you want to tell in the demo.
+* **Error Handling:** Basic error handling is implemented, but could be enhanced.
+* **Security:** API keys and the Flask secret key should be kept confidential (use `.env` and add it to `.gitignore`). Input sanitization is minimal as the primary interaction driver is the hardcoded sequence or trusted API calls.
