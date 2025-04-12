@@ -2,9 +2,9 @@
 
 ## Project Goal
 
-This project is a functional prototype developed for the **UMHackathon 2025**, addressing **Domain 3: Economic Empowerment through AI**. [cite: 1]
+This project is a functional prototype developed for the **UMHackathon 2025**, addressing **Domain 3: Economic Empowerment through AI**. 
 
-The goal is to build **MEX Assistant**, an AI-powered chat assistant designed to empower Grab's merchant-partners (MEX) by providing actionable insights and guidance derived from their own business data. [cite: 4, 20, 21] This prototype focuses on demonstrating core capabilities via a web-based chat interface.
+The goal is to build **MEX Assistant**, an AI-powered chat assistant designed to empower Grab's merchant-partners (MEX) by providing actionable insights and guidance derived from their own business data. This prototype focuses on demonstrating core capabilities via a web-based chat interface.
 
 ## Features Implemented
 
