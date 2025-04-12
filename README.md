@@ -1,6 +1,6 @@
 # MEX Assistant - AI Business Advisor for Grab Merchants (UMHackathon 2025 Prototype)
 
-**[➡️ View Presentation Slides](YOUR_SLIDE_LINK_HERE)** <-- Replace YOUR_SLIDE_LINK_HERE with your actual link
+   **[➡️ View Presentation Slides](https://docs.google.com/presentation/d/1PPH9yx-9Dnsjoy-uEY1-2SwvkmQAaklgi3BXsHk7ebg/edit?usp=sharing)** 
 
 ## Description
 
