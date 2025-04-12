@@ -67,48 +67,59 @@ document.addEventListener('DOMContentLoaded', () => {
         chatbox.scrollTop = chatbox.scrollHeight;
 
         try {
-            // --- MODIFIED: Send history in the request body ---
+            // Send history in the request body (fetch call)
             const response = await fetch('/api/interact-llm', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                // Send the current state of chatHistory
                 body: JSON.stringify({ history: chatHistory })
             });
 
-            // Remove thinking indicator
+            // --- NEW: Add delay AFTER fetch completes, BEFORE showing reply ---
+            const replyDelay = 750; // Delay in milliseconds (e.g., 0.75 seconds). Adjust as needed.
+            await new Promise(resolve => setTimeout(resolve, replyDelay));
+            // --- END NEW DELAY ---
+
+            // Remove thinking indicator (NOW happens AFTER the initial delay)
             if (chatbox.contains(thinkingDiv)) {
                 chatbox.removeChild(thinkingDiv);
             }
 
-            // Inside the try block, after fetch is successful:
-
+            // Check if the response was successful
             if (!response.ok) {
-                // ... (error handling as before, maybe remove user message from history) ...
-                if (chatHistory.length > 0 && chatHistory[chatHistory.length - 1].role === 'user') { chatHistory.pop(); }
+                let errorMsg = `Sorry, an error occurred (Status: ${response.status}).`;
+                try {
+                    const errorData = await response.json();
+                    errorMsg += ` ${errorData.error || 'Unknown server error.'}`;
+                } catch (e) { /* Ignore if response body isn't JSON */ }
+                displayMessage(errorMsg, 'ai'); // Display error
+                console.error('API Error Status:', response.status, errorMsg);
+                // Remove user message from history on error
+                if(chatHistory.length > 0 && chatHistory[chatHistory.length - 1].role === 'user') { chatHistory.pop(); }
                 return;
             }
 
+            // Parse the successful JSON response
             const data = await response.json();
 
-            // --- MODIFIED: Handle multiple replies ---
+            // Handle multiple replies (with existing inter-message delay logic)
             if (data && data.replies && Array.isArray(data.replies) && data.replies.length > 0) {
                 for (let i = 0; i < data.replies.length; i++) {
                     const replyText = data.replies[i];
 
-                    // Optional: Add delay before showing the second, third, etc., reply
+                    // Optional: Add delay BETWEEN multiple replies (starts from the second reply)
                     if (i > 0) {
-                        // Add a delay (e.g., 750 milliseconds)
-                        await new Promise(resolve => setTimeout(resolve, 750));
+                        const multiReplyDelay = 750; // Delay between multiple messages (can be same or different)
+                        await new Promise(resolve => setTimeout(resolve, multiReplyDelay));
 
-                        // Optional: Add/remove a temporary "typing" indicator during delay
+                        // Optional: Add/remove a temporary "typing" indicator during this inter-message delay
                         const typingIndicator = document.createElement('div');
                         typingIndicator.classList.add('message', 'ai-message', 'thinking');
                         typingIndicator.innerHTML = '<div class="message-content">...</div>';
                         chatbox.appendChild(typingIndicator);
                         chatbox.scrollTop = chatbox.scrollHeight;
-                        await new Promise(resolve => setTimeout(resolve, 600)); // Shorter delay for typing dots
+                        await new Promise(resolve => setTimeout(resolve, 600)); // Adjust timing
                         if (chatbox.contains(typingIndicator)) {
-                            chatbox.removeChild(typingIndicator);
+                           chatbox.removeChild(typingIndicator);
                         }
                     }
 
@@ -118,22 +129,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     addMessageToHistory('assistant', replyText);
                 }
             } else {
-                // Handle cases where response is empty or invalid
-                displayMessage('Sorry, I received an unexpected response format.', 'ai');
-                console.warn("Received empty or invalid replies array:", data);
-                // Remove user message from history as the response was bad
-                if (chatHistory.length > 0 && chatHistory[chatHistory.length - 1].role === 'user') { chatHistory.pop(); }
+                 // Handle cases where response is empty or invalid replies array
+                 displayMessage('Sorry, I received an unexpected response format.', 'ai');
+                 console.warn("Received empty or invalid replies array:", data);
+                 // Remove user message from history as the response was bad
+                 if(chatHistory.length > 0 && chatHistory[chatHistory.length - 1].role === 'user') { chatHistory.pop(); }
             }
             // Log current history state (optional for debugging)
             console.log("Current client history:", chatHistory);
-            // --- END OF MODIFIED REPLY HANDLING ---
 
         } catch (error) {
-            // ... (network/fetch error handling as before, maybe remove user message from history) ...
-            if (chatbox.contains(thinkingDiv)) { chatbox.removeChild(thinkingDiv); } // Ensure thinking removed
-            console.error('Fetch/Network Error:', error);
-            displayMessage('Sorry, there was an error communicating with the assistant.', 'ai');
-            if (chatHistory.length > 0 && chatHistory[chatHistory.length - 1].role === 'user') { chatHistory.pop(); }
+             // Network/fetch error handling
+             // Ensure thinking indicator is removed even on error
+             if (chatbox.contains(thinkingDiv)){
+                 chatbox.removeChild(thinkingDiv);
+             }
+             console.error('Fetch/Network Error:', error);
+             displayMessage('Sorry, there was an error communicating with the assistant.', 'ai');
+             // Also remove user message from history on network error
+             if(chatHistory.length > 0 && chatHistory[chatHistory.length - 1].role === 'user') { chatHistory.pop(); }
         }
     } // End of sendMessage function
 
